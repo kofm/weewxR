@@ -1,0 +1,11 @@
+Package: weewxR
+Title: R Functions for WeeWX Database Access, Export, and Reporting
+Version: 0.0.0.9000
+Authors@R: 
+    person("Gabriele", "Mongiano", , "gabriele.mongiano@crea.gov.it", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-1638-3566"))
+Description: weewxR is an R package that facilitates seamless interaction with WeeWX databases, empowering users to access, manipulate, export, and generate reports from weather data collected by WeeWX, an open-source weather station software. With "weewxR," users can effortlessly query specific weather measurements, perform data transformations and aggregations, export data in various formats, and generate insightful reports and visualizations for data-driven decision-making. It provides a comprehensive toolkit for harnessing the power of WeeWX databases within the R environment.
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
