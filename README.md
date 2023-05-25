@@ -58,5 +58,7 @@ This is a basic example which shows you how to solve a common problem:
 
 ```r
 library(weewxR)
-## basic example code
+
+export_weewx("database.sdb") %>%
+  tidy_weewx_names()
 ```
