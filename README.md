@@ -1,7 +1,9 @@
 # weewxR
 
 <!-- badges: start -->
+
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+
 <!-- badges: end -->
 
 ## Introduction
@@ -29,11 +31,6 @@ intuitive and efficient methods.
 - Data manipulation and aggregation: Perform various data transformations,
   aggregations, and calculations to derive meaningful insights from the WeeWX
   data.
-- Data export capabilities: Export selected weather data in various formats
-  (e.g., CSV, Excel) for further analysis or integration with other systems.
-- Reporting and visualization: Generate customizable reports and visualizations
-  to visualize weather trends, patterns, and summary statistics, aiding in
-  data-driven decision-making.
 
 "weewxR" empowers weather enthusiasts, researchers, and data analysts with a
 powerful toolkit for leveraging WeeWX databases within their R workflows.
@@ -52,7 +49,7 @@ if (!requireNamespace("devtools", quietly = TRUE)) {
 }
 
 # Install weewxR from GitHub
-devtools::install_github("your-username/weewxR")
+devtools::install_github("kofm/weewxR")
 ```
 
 ## Usage example
