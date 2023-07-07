@@ -4,7 +4,7 @@
 \alias{export_weewx}
 \title{Export WeeWX Data}
 \usage{
-export_weewx(db_path)
+export_weewx(db_path, vars = c("outTemp"))
 }
 \arguments{
 \item{db_path}{Path to the WeeWX database file.}

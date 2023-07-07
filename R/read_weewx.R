@@ -11,32 +11,51 @@
 #' @importFrom rlang .data
 #' @importFrom magrittr %>%
 #' @export
-export_weewx <- function(db_path) {
-  tryCatch(
-    {
-      pool <- pool::dbPool(
-        drv = RSQLite::SQLite(),
-        dbname = db_path
-      )
+export_weewx <- function(
+    db_path,
+    vars = c("outTemp")) {
+    tryCatch(
+        {
+            pool <- pool::dbPool(
+                drv = RSQLite::SQLite(),
+                dbname = db_path
+            )
 
-      con <- pool::poolCheckout(pool)
+            con <- pool::poolCheckout(pool)
 
-      w <- dplyr::tbl(con, "archive") %>% dplyr::collect()
+            # Retrieve the table columns
+            table_name <- "archive"
+            columns <- DBI::dbListFields(con, table_name)
 
-      pool::poolReturn(con)
+            vars_to_retrieve <- c("dateTime", vars)
 
-      pool::poolClose(pool)
+            # Check if the required columns exist
+            missing_columns <- setdiff(vars_to_retrieve, columns)
 
-      vars_to_retrieve <- c("dateTime", "outTemp", "rain", "radiation")
+            if (length(missing_columns) > 0) {
+                pool::poolReturn(con)
+                pool::poolClose(pool)
+                stop(
+                    "The following columns are missing in the WeeWX db: ",
+                    paste(missing_columns, collapse = ", ")
+                )
+            } else {
+                w <- dplyr::tbl(con, "archive") %>% dplyr::collect()
 
-      dplyr::select(w, !!!vars_to_retrieve) %>%
-        dplyr::mutate(dateTime = lubridate::as_datetime(.data$dateTime))
-    },
-    error = function(e) {
-      message("Error accessing the WeeWX database: ", e$message)
-      NULL
-    }
-  )
+                pool::poolReturn(con)
+
+                pool::poolClose(pool)
+
+                dplyr::select(w, !!!vars_to_retrieve) %>%
+                    dplyr::mutate(dateTime = lubridate::as_datetime(.data$dateTime)) %>%
+                    return()
+            }
+        },
+        error = function(e) {
+            message("Error accessing the WeeWX database. ", e$message)
+            return(NULL)
+        }
+    )
 }
 
 #' Tidy WeeWX Variable Names
@@ -48,11 +67,11 @@ export_weewx <- function(db_path) {
 #' @importFrom dplyr rename_all
 #' @export
 tidy_weewx_names <- function(data) {
-  new_names <- names(data) %>%
-    stringr::str_replace_all("\\.", "_") %>%
-    stringr::str_replace_all("([A-Z])", "_\\1") %>%
-    stringr::str_replace_all("_+", "_") %>%
-    stringr::str_to_lower()
+    new_names <- names(data) %>%
+        stringr::str_replace_all("\\.", "_") %>%
+        stringr::str_replace_all("([A-Z])", "_\\1") %>%
+        stringr::str_replace_all("_+", "_") %>%
+        stringr::str_to_lower()
 
-  dplyr::rename_all(data, ~new_names)
+    dplyr::rename_all(data, ~new_names)
 }
